@@ -3,6 +3,7 @@ import sys
 import unicodedata
 import re
 import youtube_dl
+from slugify import slugify
 
 VIDEOS_FOLDER = 'super-mega-wonder-songs'
 LINKS_FILE = 'links.txt'
@@ -25,27 +26,7 @@ def download(url):
             msg = title + " was downloaded!"
             print(msg)
             return title
-
-def getLinks():
-    links = open(LINKS_FILE,'r').readlines()
-    return links
-
-def slugify(value, allow_unicode=False):
-    """
-    Taken from https://github.com/django/django/blob/master/django/utils/text.py
-    Convert to ASCII if 'allow_unicode' is False. Convert spaces or repeated
-    dashes to single dashes. Remove characters that aren't alphanumerics,
-    underscores, or hyphens. Convert to lowercase. Also strip leading and
-    trailing whitespace, dashes, and underscores.
-    """
-    value = str(value)
-    if allow_unicode:
-        value = unicodedata.normalize('NFKC', value)
-    else:
-        value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
-    value = re.sub(r'[^\w\s-]', '', value.lower())
-    return re.sub(r'[-\s]+', '-', value).strip('-_')
-
+            
 with open(LINKS_FILE, "r") as linksFile, open(PROCESSED_FILE,'w') as processedFile:
     for link in linksFile:
         if link.startswith(TITLE_PREFIX):
