@@ -5,6 +5,7 @@ __pycache__/
 
 *.so
 *.mp4
+*.part
 
 # Distribution / packaging
 .Python
