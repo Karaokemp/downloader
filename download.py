@@ -3,10 +3,10 @@ import sys
 import unicodedata
 import re
 import youtube_dl
-import pandas as pd
 
 VIDEOS_FOLDER = 'super-mega-wonder-songs'
 LINKS_FILE = 'links.txt'
+PROCESSED_FILE = 'finished.txt'
 
 
 def download(url):
@@ -19,11 +19,11 @@ def download(url):
             title = songInfo['title']
             newFileName = VIDEOS_FOLDER + '/' +slugify(title) + '.mp4'
 
-            os.rename(tempFile, newFileName)
-            #os.remove(tempFile)
+            os.replace(tempFile, newFileName)
 
             msg = title + " was downloaded!"
             print(msg)
+            return title
 
 def getLinks():
     links = open(LINKS_FILE,'r').readlines()
@@ -45,6 +45,12 @@ def slugify(value, allow_unicode=False):
     value = re.sub(r'[^\w\s-]', '', value.lower())
     return re.sub(r'[-\s]+', '-', value).strip('-_')
 
-links = getLinks()
-for link in links:
-    download(link)
+with open(LINKS_FILE, "r") as linksFile, open(PROCESSED_FILE,'w') as processedFile:
+    for link in linksFile:
+        link = link.strip()
+        title = download(link)
+        processedMessage = link + 'was downloaded!' + '\n' + title + '\n'
+        processedFile.write(processedMessage)
+linksFile.close()
+processedFile.close()
+os.replace(PROCESSED_FILE,LINKS_FILE)
