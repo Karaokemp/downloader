@@ -7,6 +7,7 @@ import youtube_dl
 VIDEOS_FOLDER = 'super-mega-wonder-songs'
 LINKS_FILE = 'links.txt'
 PROCESSED_FILE = 'finished.txt'
+TITLE_PREFIX = 'TITLE: '
 
 
 def download(url):
@@ -47,9 +48,11 @@ def slugify(value, allow_unicode=False):
 
 with open(LINKS_FILE, "r") as linksFile, open(PROCESSED_FILE,'w') as processedFile:
     for link in linksFile:
+        if link.startswith(TITLE_PREFIX):
+            continue
         link = link.strip()
         title = download(link)
-        processedMessage = link + 'was downloaded!' + '\n' + title + '\n'
+        processedMessage = link  + '\n' + TITLE_PREFIX+ title + ' was downloaded!' + '\n'
         processedFile.write(processedMessage)
 linksFile.close()
 processedFile.close()
