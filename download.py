@@ -25,15 +25,11 @@ def download(url):
             try:
                 os.replace(tempFile, newFileName)
             except:
-                newFileName = 'SONG-' + str(uuid.uuid4())
+                newFileName = VIDEOS_FOLDER + '/' + 'SONG-' + str(uuid.uuid4()) + '.mp4'
                 os.replace(tempFile, newFileName)
             msg = title + " was downloaded!"
             print(msg)
             return title
-
-def getLinks():
-    links = open(LINKS_FILE,'r').readlines()
-    return links
 
 
 with open(LINKS_FILE, "r") as linksFile, open(PROCESSED_FILE,'w') as processedFile:
