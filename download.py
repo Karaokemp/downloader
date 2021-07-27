@@ -37,7 +37,7 @@ def download(url):
             return title
 
 
-with open(LINKS_FILE, "r") as linksFile, open(PROCESSED_FILE,'w') as processedFile:
+with open(LINKS_FILE,'r',encoding="utf8") as linksFile, open(PROCESSED_FILE,'w',encoding="utf8") as processedFile:
     for link in linksFile:
         if link.startswith(TITLE_PREFIX):
             continue
