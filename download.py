@@ -6,10 +6,12 @@ import youtube_dl
 from slugify import slugify
 import uuid
 
-VIDEOS_FOLDER = 'super-mega-wonder-songs'
+VIDEOS_FOLDER = 'videos'
+UNNAMED_FOLDER = 'to-rename'
+
 LINKS_FILE = 'links.txt'
 PROCESSED_FILE = 'finished.txt'
-TITLE_PREFIX = 'TITLE: '
+TITLE_PREFIX = '#'
 
 
 def download(url):
@@ -25,7 +27,10 @@ def download(url):
             try:
                 os.replace(tempFile, newFileName)
             except:
-                newFileName = VIDEOS_FOLDER + '/' + 'SONG-' + str(uuid.uuid4()) + '.mp4'
+                unnamedPath = VIDEOS_FOLDER + '/' + UNNAMED_FOLDER
+                newFileName = unnamedPath + '/' + 'SONG-' + str(uuid.uuid4()) + '.mp4'
+                if not os.path.exists(unnamedPath):
+                    os.makedirs(unnamedPath)
                 os.replace(tempFile, newFileName)
             msg = title + " was downloaded!"
             print(msg)
@@ -38,7 +43,7 @@ with open(LINKS_FILE, "r") as linksFile, open(PROCESSED_FILE,'w') as processedFi
             continue
         link = link.strip()
         title = download(link)
-        processedMessage = link  + '\n' + TITLE_PREFIX+' song ' + ' was downloaded!' + '\n'
+        processedMessage = link  + '\n' + TITLE_PREFIX + 'song was downloaded!' + '\n'
         processedFile.write(processedMessage)
 linksFile.close()
 processedFile.close()
