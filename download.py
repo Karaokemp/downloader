@@ -19,7 +19,8 @@ def download(url):
 }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             songInfo = ydl.extract_info(url, download=True)
-            title = slugify(songInfo['title'])
+            title = songInfo['title']
+            title = title.replace("!@#$%^&*()[]{};:,./<>?\|`~-=_+", " ")
             newFileName = VIDEOS_FOLDER + '/' + title + '.mp4'
             os.replace(tempFile, newFileName)
 
@@ -38,7 +39,7 @@ with open(LINKS_FILE, "r") as linksFile, open(PROCESSED_FILE,'w') as processedFi
             continue
         link = link.strip()
         title = download(link)
-        processedMessage = link  + '\n' + TITLE_PREFIX+ title + ' was downloaded!' + '\n'
+        processedMessage = link  + '\n' + TITLE_PREFIX+' song ' + ' was downloaded!' + '\n'
         processedFile.write(processedMessage)
 linksFile.close()
 processedFile.close()
