@@ -23,6 +23,7 @@ def download(url):
         try:
             songInfo = ydl.extract_info(url, download=True)
         except:
+            songInfo = {'title':'UNDEFINED'}
             print('could not process link: ' + url)
         title = songInfo['title']
         title = title.replace("!@#$%^&*()[]{};:,./<>?\/|`~-=_+", " ")
@@ -38,7 +39,6 @@ def download(url):
         msg = title + " was downloaded!"
         print(msg)
         return title
-
 
 with open(LINKS_FILE,'r',encoding="utf8") as linksFile, open(PROCESSED_FILE,'w',encoding="utf8") as processedFile:
     for link in linksFile:
