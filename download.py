@@ -20,10 +20,13 @@ def download(url):
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             songInfo = ydl.extract_info(url, download=True)
             title = songInfo['title']
-            title = title.replace("!@#$%^&*()[]{};:,./<>?\|`~-=_+", " ")
+            title = title.replace("!@#$%^&*()[]{};:,./<>?\/|`~-=_+", " ")
             newFileName = VIDEOS_FOLDER + '/' + title + '.mp4'
-            os.replace(tempFile, newFileName)
-
+            try:
+                os.replace(tempFile, newFileName)
+            except:
+                newFileName = 'SONG-' + str(uuid.uuid4())
+                os.replace(tempFile, newFileName)
             msg = title + " was downloaded!"
             print(msg)
             return title
