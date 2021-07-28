@@ -11,8 +11,7 @@ UNNAMED_FOLDER = 'to-rename'
 
 LINKS_FILE = 'links.txt'
 PROCESSED_FILE = 'finished.txt'
-TITLE_PREFIX = '#'
-
+UNHANDLED_FILE = 'unhandled.txt'
 
 def download(url):
     tempFile = VIDEOS_FOLDER + '/' +'video' + '.mp4'
@@ -20,7 +19,6 @@ def download(url):
     'outtmpl': tempFile
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        try:
             songInfo = ydl.extract_info(url, download=True)
             title = songInfo['title']
             title = title.replace("!@#$%^&*()[]{};:,./<>?\/|`~-=_+", " ")
@@ -37,18 +35,16 @@ def download(url):
             msg = title + " was downloaded!"
             print(msg)
             return title
-        except:
-            songInfo = {'title':'UNDEFINED'}
-            print('could not process link: ' + url)
-
-with open(LINKS_FILE,'r',encoding="utf8") as linksFile, open(PROCESSED_FILE,'w',encoding="utf8") as processedFile:
+with open(LINKS_FILE,'r',encoding="utf8") as linksFile, open(PROCESSED_FILE,'w',encoding="utf8") as processedFile, open(UNHANDLED_FILE,'w',encoding="utf8") as errorsFile:
     for link in linksFile:
-        if link.startswith(TITLE_PREFIX):
-            continue
         link = link.strip()
-        title = download(link)
-        processedMessage = link  + '\n' + TITLE_PREFIX + 'song was downloaded!' + '\n'
-        processedFile.write(processedMessage)
+        line = link  + '\n'
+        try:
+            title = download(link)
+            processedFile.write(line)
+        except:
+            errorsFile.write(line)
 linksFile.close()
 processedFile.close()
-os.replace(PROCESSED_FILE,LINKS_FILE)
+errorsFile.close()
+print('finished successfully !')
