@@ -33,18 +33,19 @@ def download(url):
             os.replace(tempFile, newFileName)
             return title
 
-with open(LINKS_FILE,'r',encoding="utf8") as linksFile, open(PROCESSED_FILE,'w',encoding="utf8") as processedFile, open(UNHANDLED_FILE,'w',encoding="utf8") as errorsFile:
+with open(LINKS_FILE,'r',encoding="utf8") as linksFile:
     for link in linksFile:
         link = link.strip()
         line = link  + '\n'
         try:
             title = download(link)
-            processedFile.write(line)
+            with open(PROCESSED_FILE,'a',encoding="utf8") as processedFile:
+                processedFile.write(line)
+            processedFile.close()
             print(title + 'was downloaded !')
         except:
-            errorsFile.write(line)
-            print('Error on link: ' + link)
+            with open(UNHANDLED_FILE,'a',encoding="utf8") as errorsFile:
+                errorsFile.write(line)
+            errorsFile.close()
 linksFile.close()
-processedFile.close()
-errorsFile.close()
 print('finished successfully !')
