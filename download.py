@@ -31,10 +31,8 @@ def download(url):
                 if not os.path.exists(unnamedPath):
                     os.makedirs(unnamedPath)
             os.replace(tempFile, newFileName)
-            
-            msg = title + " was downloaded!"
-            print(msg)
             return title
+
 with open(LINKS_FILE,'r',encoding="utf8") as linksFile, open(PROCESSED_FILE,'w',encoding="utf8") as processedFile, open(UNHANDLED_FILE,'w',encoding="utf8") as errorsFile:
     for link in linksFile:
         link = link.strip()
@@ -42,8 +40,10 @@ with open(LINKS_FILE,'r',encoding="utf8") as linksFile, open(PROCESSED_FILE,'w',
         try:
             title = download(link)
             processedFile.write(line)
+            print(title + 'was downloaded !')
         except:
             errorsFile.write(line)
+            print('Error on link: ' + link)
 linksFile.close()
 processedFile.close()
 errorsFile.close()
