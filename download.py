@@ -8,10 +8,10 @@ import uuid
 
 VIDEOS_FOLDER = 'videos'
 UNNAMED_FOLDER = 'to-rename'
-
 LINKS_FILE = 'links.txt'
 PROCESSED_FILE = 'finished.txt'
 UNHANDLED_FILE = 'unhandled.txt'
+
 
 def download(url):
     tempFile = VIDEOS_FOLDER + '/' +'video' + '.mp4'
@@ -20,6 +20,7 @@ def download(url):
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             songInfo = ydl.extract_info(url, download=True)
+
             title = songInfo['title']
             title = title.replace("!@#$%^&*()[]{};:,./<>?\/|`~-=_+", " ")
             newFileName = VIDEOS_FOLDER + '/' + title + '.mp4'
@@ -43,7 +44,8 @@ with open(LINKS_FILE,'r',encoding="utf8") as linksFile:
                 processedFile.write(line)
             processedFile.close()
             print(title + 'was downloaded !')
-        except:
+        except Exception as e:
+            print(str(e))
             with open(UNHANDLED_FILE,'a',encoding="utf8") as errorsFile:
                 errorsFile.write(line)
             errorsFile.close()
