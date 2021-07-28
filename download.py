@@ -20,8 +20,7 @@ def download(url):
     videoId = parse_qs(parsed.query)['v'][0]
     tempFile = VIDEOS_FOLDER + '/' + videoId+ '.mp4'
     ydl_opts = {
-    'outtmpl': tempFile,
-    'nopart': True
+    'outtmpl': tempFile
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             songInfo = ydl.extract_info(url, download=True)
